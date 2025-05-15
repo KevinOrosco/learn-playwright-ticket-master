@@ -5,7 +5,8 @@ import { Calendar, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { formatDate } from "@/lib/utils"
-import type { Concert } from "@/lib/types"
+import type { Concert } from "@prisma/client"
+
 
 interface ConcertCardProps {
   concert: Concert

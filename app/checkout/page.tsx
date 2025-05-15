@@ -59,27 +59,39 @@ export default function CheckoutPage() {
   }, [searchParams])
 
   const handlePaymentSubmit = async (paymentData: any) => {
-    if (!concert) return
+  if (!concert) return
 
-    setIsLoading(true)
+  setIsLoading(true)
 
-    try {
-      // Simulamos el procesamiento del pago
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+  try {
+    const res = await fetch("/api/purchases", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        concertId: concert.id,
+        quantity,
+        name: paymentData.name,  // Debe venir de tu formulario
+        email: paymentData.email,
+      }),
+    })
 
-      // En un entorno real, aquí procesaríamos el pago y actualizaríamos la disponibilidad
-
-      // Redirigimos a la página de confirmación
-      router.push(`/confirmation?concertId=${concert.id}&quantity=${quantity}`)
-    } catch (error) {
-      toast({
-        title: "Error en el pago",
-        description: "Ha ocurrido un error al procesar el pago. Por favor, inténtalo de nuevo.",
-        variant: "destructive",
-      })
-      setIsLoading(false)
+    if (!res.ok) {
+      const error = await res.json()
+      throw new Error(error.error || "Error en la compra")
     }
+
+    router.push(`/confirmation?concertId=${concert.id}&quantity=${quantity}`)
+  } catch (error) {
+    toast({
+      title: "Error en el pago",
+      description: (error as Error).message,
+      variant: "destructive",
+    })
+    setIsLoading(false)
   }
+}
+
+
 
   if (isLoading) {
     return (

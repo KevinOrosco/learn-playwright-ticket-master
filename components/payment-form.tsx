@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const formSchema = z.object({
-  cardholderName: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
+  name: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
   cardNumber: z.string().regex(/^\d{16}$/, "El número de tarjeta debe tener 16 dígitos"),
   expiryMonth: z.string().min(1, "Selecciona un mes"),
   expiryYear: z.string().min(1, "Selecciona un año"),
@@ -28,7 +28,7 @@ export function PaymentForm({ onSubmit, isLoading }: PaymentFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cardholderName: "",
+      name: "",
       cardNumber: "",
       expiryMonth: "",
       expiryYear: "",
@@ -50,7 +50,7 @@ export function PaymentForm({ onSubmit, isLoading }: PaymentFormProps) {
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="cardholderName"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre del titular</FormLabel>

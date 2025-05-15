@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Concert {
+  id               String    @id @default(cuid())
+  name             String
+  description      String
+  date             DateTime
+  time             String
+  location         String
+  genre            String
+  price            Float
+  availableTickets Int
+  image            String?
+
+  purchases        Purchase[]
+}
+
+model Purchase {
+  id         String   @id @default(cuid())
+  concertId  String
+  concert    Concert  @relation(fields: [concertId], references: [id])
+  name       String
+  email      String
+  quantity   Int
+  createdAt  DateTime @default(now())
+}

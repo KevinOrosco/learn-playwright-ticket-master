@@ -1,7 +1,11 @@
 import { ConcertCard } from "@/components/concert-card"
-import { concerts } from "@/lib/data"
+import { prisma } from "@/lib/prisma"
 
-export default function ConcertsPage() {
+export default async function ConcertsPage() {
+  const concerts = await prisma.concert.findMany({
+    orderBy: { date: "asc" },
+  })
+
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="mb-8 text-3xl font-bold">Todos los conciertos</h1>

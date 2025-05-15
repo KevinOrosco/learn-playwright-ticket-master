@@ -3,8 +3,8 @@ import Image from "next/image"
 import { Calendar, Clock, MapPin, Music, Users } from "lucide-react"
 
 import { TicketSelector } from "@/components/ticket-selector"
-import { concerts } from "@/lib/data"
 import { formatDate } from "@/lib/utils"
+import { prisma } from "@/lib/prisma"
 
 interface ConcertPageProps {
   params: {
@@ -12,8 +12,11 @@ interface ConcertPageProps {
   }
 }
 
-export default function ConcertPage({ params }: ConcertPageProps) {
-  const concert = concerts.find((c) => c.id === params.id)
+export default async function ConcertPage({ params }: ConcertPageProps) {
+  // params es async en Next.js App Router, pero ya está desestructurado aquí
+  const concert = await prisma.concert.findUnique({
+    where: { id: params.id },  // id es string, usar directo
+  })
 
   if (!concert) {
     notFound()
@@ -23,7 +26,13 @@ export default function ConcertPage({ params }: ConcertPageProps) {
     <div className="container mx-auto px-4 py-12">
       <div className="grid gap-8 md:grid-cols-2">
         <div className="relative aspect-video overflow-hidden rounded-lg">
-          <Image src={concert.image || "/placeholder.svg"} alt={concert.name} fill className="object-cover" priority />
+          <Image
+            src={concert.image || "/placeholder.svg"}
+            alt={concert.name}
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
         <div>
           <h1 className="mb-4 text-3xl font-bold">{concert.name}</h1>
