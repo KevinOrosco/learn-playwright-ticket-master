@@ -7,15 +7,16 @@ import { formatDate } from "@/lib/utils"
 import { prisma } from "@/lib/prisma"
 
 interface ConcertPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default async function ConcertPage({ params }: ConcertPageProps) {
-  // params es async en Next.js App Router, pero ya está desestructurado aquí
+  const { id } = await params;  // <-- espera a que se resuelva
+
   const concert = await prisma.concert.findUnique({
-    where: { id: params.id },  // id es string, usar directo
+    where: { id },
   })
 
   if (!concert) {
