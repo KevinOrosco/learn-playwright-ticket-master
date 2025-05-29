@@ -1,7 +1,11 @@
 import { test, expect } from '@playwright/test';
 
 test('Flujo compra en detalle de concierto', async ({ page }) => {
-  await page.goto('http://localhost:3000/concerts/2');
+  
+  await page.goto('http://localhost:3000');
+  await page.locator('div').filter({ hasText: /^\$65\.50Ver detalles$/ }).getByRole('link').click();
+  
+  await expect(page).toHaveURL('http://localhost:3000/concerts/2');
 
 
   // Verificar que título del concierto esté visible

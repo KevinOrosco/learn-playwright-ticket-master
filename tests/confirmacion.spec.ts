@@ -1,10 +1,17 @@
 import { test, expect } from '@playwright/test';
 
 test('La página de confirmación muestra correctamente los detalles de la compra', async ({ page }) => {
+  
+  await page.goto('http://localhost:3000');
+  await page.locator('div').filter({ hasText: /^\$65\.50Ver detalles$/ }).getByRole('link').click();
+  
+  await expect(page).toHaveURL('http://localhost:3000/concerts/2');
+  await page.getByRole('button', { name: 'Comprar entradas' }).click();
+  
   await page.goto('http://localhost:3000/confirmation?concertId=2&quantity=1');
 
   // Verifica el título de éxito
-  await expect(page.getByRole('heading', { name: '¡Compra exitosa!' })).toBeVisible();
+  await expect(page.getByText('¡Compra exitosa!' )).toBeVisible();
 
   // Verifica el mensaje de confirmación
   await expect(page.getByText(/Tu compra ha sido procesada correctamente/i)).toBeVisible();

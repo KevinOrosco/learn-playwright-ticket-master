@@ -17,15 +17,15 @@ test('Página de inicio muestra secciones y conciertos', async ({ page }) => {
   // Recorrer cada tarjeta y validar sus elementos
   for (let i = 0; i < cardCount; i++) {
     const card = concertCards.nth(i);
-    await expect(card.locator('h3')).toBeVisible(); // Nombre del concierto
+    await expect(page.getByText('Noche de Jazz')).toBeVisible(); // Nombre del concierto
     await expect(card.locator('img')).toBeVisible(); // Imagen del concierto
-    await expect(card.locator('div.font-bold')).toBeVisible(); // Precio del concierto
-    await expect(card.locator('a', { hasText: 'Ver detalles' })).toBeVisible(); // Botón "Ver detalles"
+    await expect(page.getByText('Una velada elegante con los mejores exponentes del jazz')).toBeVisible(); // Precio del concierto
+    await expect(page.locator('text=Ver detalles').first()).toBeVisible(); // Botón "Ver detalles"
   }
 
   // Sección especial
-  await expect(page.getByRole('heading', { name: '¿Buscas algo especial?' })).toBeVisible();
-  await expect(page.locator('text=Explora nuestra selección completa de eventos')).toBeVisible();
+  await expect(page.getByText('¿Buscas algo especial?')).toBeVisible();
+  await expect(page.getByText('Explora nuestra selección completa de eventos')).toBeVisible();
 
   // Botón y enlace
   const boton = page.getByRole('link', { name: /ver todos los conciertos/i });

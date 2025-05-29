@@ -9,7 +9,13 @@ test('Flujo de pago exitoso y confirmación', async ({ page }) => {
     })
   );
 
-  await page.goto('http://localhost:3000/checkout?concertId=2&quantity=1');
+  await page.goto('http://localhost:3000');
+  await page.locator('div').filter({ hasText: /^\$65\.50Ver detalles$/ }).getByRole('link').click();
+  
+  await expect(page).toHaveURL('http://localhost:3000/concerts/2');
+  await page.getByRole('button', { name: 'Comprar entradas' }).click();
+
+  await expect(page).toHaveURL('http://localhost:3000/checkout?concertId=2&quantity=1');
 
   // Llenar el formulario de pago
   await page.getByRole('textbox', { name: 'Nombre del titular' }).fill('Kevin Test');
@@ -31,7 +37,7 @@ test('Flujo de pago exitoso y confirmación', async ({ page }) => {
   // Simular el click en "Completar compra"
   await page.getByRole('button', { name: 'Completar compra' }).click();
 
-  await expect(page).toHaveURL(/\/confirmation\?concertId=.*&quantity=\d+/);
-  await expect(page.getByRole('heading', { name: '¡Compra exitosa!' })).toBeVisible();
+  await expect(page).toHaveURL("http://localhost:3000/confirmation?concertId=2&quantity=1");
+  await expect(page.getByText('¡Compra exitosa!' )).toBeVisible();
 
 });
