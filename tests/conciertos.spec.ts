@@ -3,9 +3,9 @@ import { test, expect } from '@playwright/test';
 test('Pagina de conciertos muestra todos los conciertos', async ({ page }) => {
   await page.goto('http://localhost:3000/');
   await page.getByRole('link', { name: 'Ver todos los conciertos' }).click();
-  
-  await expect(page).toHaveURL("http://localhost:3000/concerts");
 
+  await expect(page).toHaveURL("http://localhost:3000/concerts");
+ 
   // Título principal
   await expect(page.getByRole('heading', { name: 'Todos los conciertos' })).toBeVisible();
   
